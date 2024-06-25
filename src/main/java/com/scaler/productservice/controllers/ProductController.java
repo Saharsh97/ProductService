@@ -16,19 +16,12 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-    ProductService productService;
-    LogisticService logisticService;
-
     @Autowired
-    public ProductController(ProductService productService, LogisticService logisticService){
-        this.productService = productService;
-        this.logisticService = logisticService;
-    }
+    ProductService productService;
 
     @GetMapping("/products/{id}")
     public Product getSingleProduct(@PathVariable("id") String productId){
         Product product = productService.getSingleProduct(productId);
-
         return product;
     }
 

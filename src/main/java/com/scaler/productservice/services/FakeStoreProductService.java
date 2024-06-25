@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Primary
 public class FakeStoreProductService implements ProductService{
 
     // It has to hit the APIs of FakeStore server

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Primary
 public class RealProductService implements ProductService{
     @Override
     public Product getSingleProduct(String productId) {
