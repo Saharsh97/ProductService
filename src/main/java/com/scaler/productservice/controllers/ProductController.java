@@ -3,7 +3,6 @@ package com.scaler.productservice.controllers;
 
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.FakeStoreProductService;
-import com.scaler.productservice.services.LogisticService;
 import com.scaler.productservice.services.ProductService;
 import com.scaler.productservice.services.RealProductService;
 import org.springframework.beans.factory.annotation.Autowired;
