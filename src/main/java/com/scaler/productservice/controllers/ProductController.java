@@ -2,8 +2,8 @@ package com.scaler.productservice.controllers;
 
 
 import com.scaler.productservice.dto.FakeStoreDTO;
-import com.scaler.productservice.dto.ListProductsDTO;
-import com.scaler.productservice.dto.ProductDTO;
+import com.scaler.productservice.dto.ListProductsResponseDTO;
+import com.scaler.productservice.dto.ProductResponseDTO;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,43 +25,43 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<ProductDTO> getSingleProduct(@PathVariable("id") String productId){
-        ResponseEntity<ProductDTO> responseEntity;
+    public ResponseEntity<ProductResponseDTO> getSingleProduct(@PathVariable("id") String productId){
+        ResponseEntity<ProductResponseDTO> responseEntity;
         try {
             Product product = productService.getSingleProduct(productId);
 
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProduct(product);
-            productDTO.setResponseMessage("success");
+            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+            productResponseDTO.setProduct(product);
+            productResponseDTO.setResponseMessage("success");
 
-            responseEntity = new ResponseEntity<>(productDTO, HttpStatus.OK);
+            responseEntity = new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
         } catch (Exception e){
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProduct(null);
-            productDTO.setResponseMessage("error occured: " + e.getMessage());
+            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+            productResponseDTO.setProduct(null);
+            productResponseDTO.setResponseMessage("error occured: " + e.getMessage());
 
-            responseEntity = new ResponseEntity<>(productDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(productResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
 
     @GetMapping("/products")
-    public ResponseEntity<ListProductsDTO> getAllProducts(){
-        ResponseEntity<ListProductsDTO> responseEntity;
+    public ResponseEntity<ListProductsResponseDTO> getAllProducts(){
+        ResponseEntity<ListProductsResponseDTO> responseEntity;
         try {
             List<Product> products = productService.getAllProducts();
 
-            ListProductsDTO listProductsDTO = new ListProductsDTO();
-            listProductsDTO.setProducts(products);
-            listProductsDTO.setResponseMessage("success");
+            ListProductsResponseDTO listProductsResponseDTO = new ListProductsResponseDTO();
+            listProductsResponseDTO.setProducts(products);
+            listProductsResponseDTO.setResponseMessage("success");
 
-            responseEntity = new ResponseEntity<>(listProductsDTO, HttpStatus.OK);
+            responseEntity = new ResponseEntity<>(listProductsResponseDTO, HttpStatus.OK);
         } catch (Exception e){
-            ListProductsDTO listProductsDTO = new ListProductsDTO();
-            listProductsDTO.setProducts(null);
-            listProductsDTO.setResponseMessage("error in /products");
+            ListProductsResponseDTO listProductsResponseDTO = new ListProductsResponseDTO();
+            listProductsResponseDTO.setProducts(null);
+            listProductsResponseDTO.setResponseMessage("error in /products");
 
-            responseEntity = new ResponseEntity<>(listProductsDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(listProductsResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
