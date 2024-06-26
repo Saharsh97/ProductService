@@ -1,6 +1,8 @@
 package com.scaler.productservice.dto;
 
 
+import com.scaler.productservice.models.Category;
+import com.scaler.productservice.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +17,21 @@ public class FakeStoreResponse {
     private String description;
     private String image;
     private String category;
+
+    public Product getProduct(){
+        Product product = new Product();
+
+        product.setId(this.id);
+        product.setName(this.title);
+        product.setDescription(this.description);
+        product.setImageUrl(this.image);
+        product.setPrice(this.price * 1.0);
+        Category category = new Category();
+        category.setName(this.category);
+        product.setCategory(category);
+
+        return product;
+    }
 
 }
 

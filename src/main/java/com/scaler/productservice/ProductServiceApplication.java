@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ProductServiceApplication {
 
     public static void main(String[] args) {
-        Product product = new Product();
         SpringApplication.run(ProductServiceApplication.class, args);
     }
 
