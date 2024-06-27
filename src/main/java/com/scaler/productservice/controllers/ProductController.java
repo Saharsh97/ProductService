@@ -1,6 +1,7 @@
 package com.scaler.productservice.controllers;
 
 
+import com.scaler.productservice.dto.FakeStoreRequestDTO;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.FakeStoreProductService;
 import com.scaler.productservice.services.ProductService;
@@ -38,8 +39,8 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody Product productReceivedFromRequest){
-        Product savedProduct = productService.createProduct(productReceivedFromRequest);
+    public Product createProduct(@RequestBody FakeStoreRequestDTO fakeStoreRequestDTO){
+        Product savedProduct = productService.createProduct(fakeStoreRequestDTO);
         return savedProduct;
     }
 }

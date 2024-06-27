@@ -4,11 +4,14 @@ package com.scaler.productservice.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+
+
+// its purpose to accept response from FakeStore API
 // purpose, to store the data from outside world.
 // we place this inside DTO (Data Transfer Objects)
 @Getter
 @Setter
-public class FakeStoreResponse {
+public class FakeStoreResponseDTO {
     private String id;
     private String title;
     private Integer price;
