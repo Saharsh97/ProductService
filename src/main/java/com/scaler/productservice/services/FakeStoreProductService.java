@@ -1,5 +1,6 @@
 package com.scaler.productservice.services;
 
+import com.scaler.productservice.dto.ErrorResponseDTO;
 import com.scaler.productservice.dto.FakeStorePOSTResponseDTO;
 import com.scaler.productservice.dto.FakeStoreRequestDTO;
 import com.scaler.productservice.dto.FakeStoreResponseDTO;
@@ -9,15 +10,19 @@ import com.scaler.productservice.exceptions.ProductNotFoundException;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Primary
+@Qualifier("KarthikFakeStoreService")
 public class FakeStoreProductService implements ProductService{
 
     // It has to hit the APIs of FakeStore server
@@ -26,7 +31,7 @@ public class FakeStoreProductService implements ProductService{
     RestTemplate restTemplate;
 
     @Override
-    public Product getSingleProduct(String productId) throws ProductNotFoundException {
+    public Product getSingleProduct(String productId) throws ProductNotFoundException, DBNotFoundException, DBTimeoutException {
         FakeStoreResponseDTO response = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreResponseDTO.class
@@ -34,6 +39,8 @@ public class FakeStoreProductService implements ProductService{
         if(response == null){
             throw new ProductNotFoundException("product with id " + productId + " not found");
         }
+        connectToDB();
+        executeSQLQuery();
         // 1. you hit the API, you get back an object.
         // 2. You want to Structure the Object, into a particular format -> FakeStoreResponse.class
         // 3. convert the class structure, to its corresponding object -> response

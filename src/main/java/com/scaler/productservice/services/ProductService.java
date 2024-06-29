@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    Product getSingleProduct(String productId) throws ProductNotFoundException;
+    Product getSingleProduct(String productId) throws ProductNotFoundException, DBNotFoundException, DBTimeoutException;
 
     List<Product> getAllProducts();
 

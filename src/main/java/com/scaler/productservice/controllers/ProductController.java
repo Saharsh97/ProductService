@@ -1,15 +1,15 @@
 package com.scaler.productservice.controllers;
 
 
+import com.scaler.productservice.dto.ErrorResponseDTO;
 import com.scaler.productservice.dto.FakeStoreRequestDTO;
+import com.scaler.productservice.dto.ListProductsResponseDTO;
 import com.scaler.productservice.dto.ProductResponseDTO;
 import com.scaler.productservice.exceptions.DBNotFoundException;
 import com.scaler.productservice.exceptions.DBTimeoutException;
 import com.scaler.productservice.exceptions.ProductNotFoundException;
 import com.scaler.productservice.models.Product;
-import com.scaler.productservice.services.FakeStoreProductService;
 import com.scaler.productservice.services.ProductService;
-import com.scaler.productservice.services.RealProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -23,46 +23,29 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
+    @Qualifier("KarthikFakeStoreService")
     ProductService productService;
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<ProductResponseDTO> getSingleProduct(@PathVariable("id") String productId) {
-        try {
-            Product product = productService.getSingleProduct(productId);
+    public ResponseEntity<ProductResponseDTO> getSingleProduct(@PathVariable("id") String productId) throws DBTimeoutException, DBNotFoundException, ProductNotFoundException {
+        Product product = productService.getSingleProduct(productId);
 
-            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-            productResponseDTO.setProduct(product);
-            productResponseDTO.setResponseMessage("success");
+        ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+        productResponseDTO.setProduct(product);
+        productResponseDTO.setResponseMessage("success");
 
-            ResponseEntity<ProductResponseDTO> responseEntity = new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
-            return responseEntity;
-        }
-        catch (ProductNotFoundException pnfe){
-            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-            productResponseDTO.setProduct(null);
-            productResponseDTO.setResponseMessage(pnfe.getMessage() + "exception type 1");
-
-            ResponseEntity<ProductResponseDTO> responseEntity = new ResponseEntity<>(productResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-            return responseEntity;
-        }
-//        catch (DBNotFoundException dbnfe) {
-//            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-//            productResponseDTO.setProduct(null);
-//            productResponseDTO.setResponseMessage(dbnfe.getMessage()  + "exception type 2");
-//            return productResponseDTO;
-//        }
-//        catch (DBTimeoutException dbte) {
-//            ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-//            productResponseDTO.setProduct(null);
-//            productResponseDTO.setResponseMessage(dbte.getMessage()  + "exception type 1");
-//            return productResponseDTO;
-//        }
+        ResponseEntity<ProductResponseDTO> responseEntity = new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
+        return responseEntity;
     }
 
     @GetMapping("/products")
-    public List<Product> getAllProducts(){
+    public ResponseEntity<ListProductsResponseDTO>  getAllProducts(){
         List<Product> products = productService.getAllProducts();
-        return products;
+        ListProductsResponseDTO responseDTO = new ListProductsResponseDTO();
+        responseDTO.setProductList(products);
+        responseDTO.setResponseMessage("SUCCESS");
+        ResponseEntity<ListProductsResponseDTO> responseEntity = new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return responseEntity;
     }
 
     @GetMapping("/search")
@@ -76,5 +59,13 @@ public class ProductController {
     public Product createProduct(@RequestBody FakeStoreRequestDTO fakeStoreRequestDTO){
         Product savedProduct = productService.createProduct(fakeStoreRequestDTO);
         return savedProduct;
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleProductNotFoundException(ProductNotFoundException errorObject){
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO();
+        errorResponseDTO.setErrorMessage("from controller " + errorObject.getMessage());
+        ResponseEntity<ErrorResponseDTO> responseEntity = new ResponseEntity<>(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        return responseEntity;
     }
 }
