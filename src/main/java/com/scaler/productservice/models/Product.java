@@ -1,5 +1,7 @@
 package com.scaler.productservice.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +11,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class Product {
-    private String id;
+@Entity
+public class Product extends BaseModel{
     private String name;
     private String description;
     private Double price;
     private String imageUrl;
+    @ManyToOne
     private Category category;
 
     // by default, every class has an empty constructor.

@@ -19,7 +19,7 @@ public class FakeStorePOSTResponseDTO {
 
     public Product toProduct(){
         Product product = new Product();
-        product.setId(this.id);
+        product.setId(Long.valueOf(this.id));
         product.setName(this.title);
         product.setDescription(this.description);
         product.setImageUrl(this.image);
