@@ -21,7 +21,7 @@ public class Category extends BaseModel{
 
 
     // it is the inverse of the same relation between product and category
-    @OneToMany(mappedBy = "category")
-    // this relation is already handled by the category column, in the Product table
-    private List<Product> products;
+//    @OneToMany(mappedBy = "category")
+//    // this relation is already handled by the category column, in the Product table
+//    private List<Product> products;
 }

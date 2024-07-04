@@ -7,19 +7,19 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-public class ProductRepository {
 
-    public Product save(Product product){
-        // connect to MySQL DB
-        // execute the query, insert into products () values ()
-        return null;
-    }
+public interface ProductRepository extends JpaRepository<Product, Long>{
 
-    public List<Product> getAllProducts(){
-        // connect to MySQL DB
-        // execute the query, select * from products
-        return new ArrayList<Product>();
-    }
+    Product save(Product product);
 
+    Integer countProductByPriceLessThan(Double value);
+
+    List<Product> getProductByName(String name);
+    // select count(*) from products p where p.price < value;
+
+    List<Product> getProductByNameLikeAndDescriptionLikeOrderByPriceDesc(String nameText, String descText);
+    List<Product> getProductByCategoryName(String categoryName);
+    // select * from products p JOIN category c on p.category_id = c.id and c.name = categoryName
+
+    void deleteProductById(Long id);    // hard delete -> permanent deletion of the row.
 }

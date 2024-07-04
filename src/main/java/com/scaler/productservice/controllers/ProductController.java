@@ -23,7 +23,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    @Qualifier("KarthikFakeStoreService")
+    @Qualifier("RealDBProductService")
     ProductService productService;
 
     @GetMapping("/products/{id}")
@@ -56,8 +56,8 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody FakeStoreRequestDTO fakeStoreRequestDTO){
-        Product savedProduct = productService.createProduct(fakeStoreRequestDTO);
+    public Product createProduct(@RequestBody Product product){
+        Product savedProduct = productService.createProduct(product);
         return savedProduct;
     }
 
