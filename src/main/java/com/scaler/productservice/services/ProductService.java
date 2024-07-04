@@ -14,6 +14,8 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
+    List<Product> getProductsByCategoryName(String categoryName);
+
     List<Product> searchProducts(String searchText);
 
     // to create object in your own DB

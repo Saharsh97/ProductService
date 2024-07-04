@@ -41,6 +41,12 @@ public class RealProductService implements ProductService{
     }
 
     @Override
+    public List<Product> getProductsByCategoryName(String categoryName) {
+        List<Product> response =  productRepository.getProductByCategoryName(categoryName);
+        return response;
+    }
+
+    @Override
     public List<Product> searchProducts(String searchText) {
         List<Product> productsFromDB = productRepository.getProductByName("");
 
@@ -62,7 +68,7 @@ public class RealProductService implements ProductService{
             Category category = new Category();
             category.setName(product.getCategory().getName());
             Category savedCategoryObject = categoryRepository.save(category);
-            // this has an id = 4.
+            // this has an id = 1.
             product.setCategory(savedCategoryObject);
         } else {
             Category alreadyPresentCategory = optionalCategory.get();

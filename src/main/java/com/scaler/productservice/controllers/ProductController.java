@@ -49,11 +49,18 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    // localhost:9000/products?text="hello"
-    public List<Product> searchProducts(@RequestParam("text") String queryText){
-        List<Product> products = productService.searchProducts(queryText);
+    // url: GET     /search?catName=laptop
+    public List<Product>  getProductsByCategoryName(@RequestParam("catName") String categoryName){
+        List<Product> products = productService.getProductsByCategoryName(categoryName);
         return products;
     }
+
+//    @GetMapping("/search")
+//    // localhost:9000/products?text="hello"
+//    public List<Product> searchProducts(@RequestParam("text") String queryText){
+//        List<Product> products = productService.searchProducts(queryText);
+//        return products;
+//    }
 
     @PostMapping("/products")
     public Product createProduct(@RequestBody Product product){
