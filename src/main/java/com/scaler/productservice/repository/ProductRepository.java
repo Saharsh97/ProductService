@@ -1,6 +1,8 @@
 package com.scaler.productservice.repository;
 
+import com.mysql.cj.log.Log;
 import com.scaler.productservice.models.Product;
+import com.scaler.productservice.projections.ProductProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -38,4 +40,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(value = "select p.* from product p LEFT JOIN category c ON p.category_id = c.id where c.name = :categoryName", nativeQuery = true)
     List<Product> properSQLQuery(@Param("categoryName") String catName);
 
+    // using SQL
+    @Query(value = "select p.id, p.name from product p LEFT JOIN category c ON p.category_id = c.id where c.name = :categoryName", nativeQuery = true)
+    List<ProductProjection> sqlQueryUsingProjection(@Param("categoryName") String catName);
+
+    // using HQL.
+    // alias is necessary here.
+    @Query(value = "select p.id as id, p.name as name from Product p where p.category.name = :categoryName")
+    List<ProductProjection> hqlQueryUsingProjection(@Param("categoryName") String catName);
 }

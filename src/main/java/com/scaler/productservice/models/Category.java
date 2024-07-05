@@ -1,8 +1,6 @@
 package com.scaler.productservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +19,7 @@ public class Category extends BaseModel{
 
 
     // it is the inverse of the same relation between product and category
-//    @OneToMany(mappedBy = "category")
-//    // this relation is already handled by the category column, in the Product table
-//    private List<Product> products;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // this relation is already handled by the category column, in the Product table
+    private List<Product> products;
 }

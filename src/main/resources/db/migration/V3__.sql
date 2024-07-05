@@ -1,0 +1,8 @@
+ALTER TABLE product
+    ADD t1 INT NULL;
+
+ALTER TABLE product
+    ADD t3 INT NULL;
+
+ALTER TABLE product
+    ADD t4 INT NULL;

@@ -1,0 +1,2 @@
+ALTER TABLE product
+    ADD t3 INT NULL;
