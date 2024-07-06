@@ -1,5 +1,6 @@
 package com.scaler.productservice.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -26,6 +27,6 @@ public class Product extends BaseModel{
     // This is non-primitive
     // I have to define a relation between product and category
     // => Cardinality.
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Category category;
 }

@@ -1,6 +1,7 @@
 package com.scaler.productservice;
 
 import com.scaler.productservice.models.Product;
+import com.scaler.productservice.projections.ProductProjection;
 import com.scaler.productservice.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,22 @@ class ProductServiceApplicationTests {
         List<Product> productList = productRepository.properSQLQuery("laptop");
         for(Product product: productList){
             System.out.println(product.getName());
+        }
+    }
+
+//    @Test
+//    void sqlFetchUsingProjection(){
+//        List<ProductProjection> productList = productRepository.fetchUsingProjection("laptop");
+//        for(ProductProjection projection: productList){
+//            System.out.println(projection.getId() + " " + projection.getName());
+//        }
+//    }
+
+    @Test
+    void hqlFetchUsingProjection(){
+        List<ProductProjection> productList = productRepository.fetchUsingProjectionHQL("laptop");
+        for(ProductProjection projection: productList){
+            System.out.println(projection.getId() + " " + projection.getName());
         }
     }
 
