@@ -1,5 +1,6 @@
 package com.scaler.productservice.repository;
 
+import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.projections.ProductProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
     // declared queries
     Product save(Product product);
+
+    List<Product> getProductsByCategoryIn(List<Category> categories);
+
+    @Query(value = "select p.* from product p where p.category_id IN :categoryIds", nativeQuery = true)
+    List<Product> useSQLToGetProductsByCategoryIn(@Param("categoryIds") List<Long> categoryIds);
+
+
+    Optional<Product> findById(Long id);
 
     Integer countProductByPriceLessThan(Double value);
 
