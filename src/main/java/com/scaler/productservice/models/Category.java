@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 public class Category extends BaseModel{
     private String name;
-
+    private String parentCategory;
 
     // it is the inverse of the same relation between product and category
     @OneToMany(mappedBy = "category")

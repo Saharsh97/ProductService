@@ -23,7 +23,7 @@ public class Product extends BaseModel{
     private String description;
     private Double price;
     private String imageUrl;
-
+    private Double discount;
     // This is non-primitive
     // I have to define a relation between product and category
     // => Cardinality.
