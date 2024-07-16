@@ -29,7 +29,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
     Integer countProductByPriceLessThan(Double value);
 
-    List<Product> getProductByName(String name);
+    List<Product> getProductByNameContaining(String text);
     // select count(*) from products p where p.price < value;
 
     List<Product> getProductByNameLikeAndDescriptionLikeOrderByPriceDesc(String nameText, String descText);
@@ -40,7 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
 
     @Query("select p from Product p")
-    List<Product> sabKuchDedo();
+    List<Product> getAllProducts();
 
     @Query("select p from Product p where p.category.name = :categoryName")
     List<Product> allProductsGivenCatNameUsingHQL(@Param("categoryName") String catName);

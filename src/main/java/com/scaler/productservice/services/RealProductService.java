@@ -36,8 +36,7 @@ public class RealProductService implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-//        return productRepository.getAllProducts();
-        return null;
+        return productRepository.getAllProducts();
     }
 
     @Override
@@ -48,16 +47,8 @@ public class RealProductService implements ProductService{
 
     @Override
     public List<Product> searchProducts(String searchText) {
-        List<Product> productsFromDB = productRepository.getProductByName("");
-
-        // core logic, filter products, whether their name contains the searchText or not
-        List<Product> result = new ArrayList<>();
-        for(Product product : productsFromDB){
-            if(product.getName().contains(searchText)){
-                result.add(product);
-            }
-        }
-        return result;
+        List<Product> productsFromDB = productRepository.getProductByNameContaining(searchText);
+        return productsFromDB;
     }
 
     @Override
