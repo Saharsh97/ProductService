@@ -28,5 +28,5 @@ public class Product extends BaseModel{
     // I have to define a relation between product and category
     // => Cardinality.
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Category category;
+    private Category category;  // eager fetch, by default.
 }

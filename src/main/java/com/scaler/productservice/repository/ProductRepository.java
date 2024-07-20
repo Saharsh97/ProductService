@@ -3,6 +3,9 @@ package com.scaler.productservice.repository;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.projections.ProductProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(value = "select p.* from product p where p.category_id IN :categoryIds", nativeQuery = true)
     List<Product> useSQLToGetProductsByCategoryIn(@Param("categoryIds") List<Long> categoryIds);
 
+    Page<Product> findAll(Pageable pageable);
 
     Optional<Product> findById(Long id);
 

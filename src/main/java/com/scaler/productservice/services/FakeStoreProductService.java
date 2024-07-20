@@ -12,6 +12,7 @@ import com.scaler.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -58,17 +59,18 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        FakeStoreResponseDTO[] responseArray = restTemplate.getForObject(
-                "https://fakestoreapi.com/products",
-                FakeStoreResponseDTO[].class
-        );
-        List<Product> productsList = new ArrayList<>();
-        for(FakeStoreResponseDTO response: responseArray){
-            Product product = response.toProduct();
-            productsList.add(product);
-        }
-        return productsList;
+    public Page<Product> getAllProducts(Integer pageSize, Integer pageNumber, String sortField, String sortOrder) {
+//        FakeStoreResponseDTO[] responseArray = restTemplate.getForObject(
+//                "https://fakestoreapi.com/products",
+//                FakeStoreResponseDTO[].class
+//        );
+//        List<Product> productsList = new ArrayList<>();
+//        for(FakeStoreResponseDTO response: responseArray){
+//            Product product = response.toProduct();
+//            productsList.add(product);
+//        }
+//        return productsList;
+        return null;
     }
 
     @Override

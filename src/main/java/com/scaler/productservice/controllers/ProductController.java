@@ -1,10 +1,7 @@
 package com.scaler.productservice.controllers;
 
 
-import com.scaler.productservice.dto.ErrorResponseDTO;
-import com.scaler.productservice.dto.FakeStoreRequestDTO;
-import com.scaler.productservice.dto.ListProductsResponseDTO;
-import com.scaler.productservice.dto.ProductResponseDTO;
+import com.scaler.productservice.dto.*;
 import com.scaler.productservice.exceptions.DBNotFoundException;
 import com.scaler.productservice.exceptions.DBTimeoutException;
 import com.scaler.productservice.exceptions.ProductNotFoundException;
@@ -12,6 +9,7 @@ import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +37,14 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<ListProductsResponseDTO>  getAllProducts(){
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<ListProductsResponseDTO>  getAllProducts(
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "name") String sortField,
+            @RequestParam(defaultValue = "asc") String sortOrder
+    )  {
+        Page<Product> products = productService.getAllProducts(pageSize, pageNumber, sortField, sortOrder);
+
         ListProductsResponseDTO responseDTO = new ListProductsResponseDTO();
         responseDTO.setProductList(products);
         responseDTO.setResponseMessage("SUCCESS");
@@ -63,8 +67,9 @@ public class ProductController {
 //    }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody Product product){
-        Product savedProduct = productService.createProduct(product);
+    public Product createProduct(@RequestBody CreateProductDTO createProductDTO){
+        Product toBeSavedProduct = createProductDTO.toProduct();
+        Product savedProduct = productService.createProduct(toBeSavedProduct);
         return savedProduct;
     }
 

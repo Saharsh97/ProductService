@@ -5,6 +5,7 @@ import com.scaler.productservice.exceptions.DBNotFoundException;
 import com.scaler.productservice.exceptions.DBTimeoutException;
 import com.scaler.productservice.exceptions.ProductNotFoundException;
 import com.scaler.productservice.models.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ProductService {
 
     Product getSingleProduct(String productId) throws ProductNotFoundException, DBNotFoundException, DBTimeoutException;
 
-    List<Product> getAllProducts();
+    Page<Product> getAllProducts(Integer pageSize, Integer pageNumber, String sortField, String sortOrder);
 
     List<Product> getProductsByCategoryName(String categoryName);
 

@@ -17,12 +17,11 @@ import java.util.List;
 @Entity
 public class Category extends BaseModel{
     private String name;
-    private String parentCategory;
 
-    // it is the inverse of the same relation between product and category
-    @OneToMany(mappedBy = "category")
-    // this relation is already handled by the category column, in the Product table
-    private List<Product> products;
-    // default behaviour for list -> lazy
+//    // it is the inverse of the same relation between product and category
+//    @OneToMany(mappedBy = "category")
+//    // this relation is already handled by the category column, in the Product table
+//    private List<Product> products;
+//    // default behaviour for list -> lazy
 
 }
