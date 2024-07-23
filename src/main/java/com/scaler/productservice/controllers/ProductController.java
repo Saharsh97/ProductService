@@ -21,7 +21,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    @Qualifier("RealDBProductService")
+    @Qualifier("FakeStoreService")
     ProductService productService;
 
     @GetMapping("/products/{id}")

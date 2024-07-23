@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Qualifier("KarthikFakeStoreService")
+@Qualifier("FakeStoreService")
 public class FakeStoreProductService implements ProductService{
 
     // It has to hit the APIs of FakeStore server
@@ -31,8 +33,16 @@ public class FakeStoreProductService implements ProductService{
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
     @Override
     public Product getSingleProduct(String productId) throws ProductNotFoundException, DBNotFoundException, DBTimeoutException {
+        Product cachedProduct = (Product) redisTemplate.opsForHash().get("Product", "PRODUCT_" + productId);
+        if(cachedProduct != null){
+            return cachedProduct;
+        }
+
         FakeStoreResponseDTO response = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreResponseDTO.class
@@ -40,37 +50,32 @@ public class FakeStoreProductService implements ProductService{
         if(response == null){
             throw new ProductNotFoundException("product with id " + productId + " not found");
         }
-        connectToDB();
-        executeSQLQuery();
-        // 1. you hit the API, you get back an object.
-        // 2. You want to Structure the Object, into a particular format -> FakeStoreResponse.class
-        // 3. convert the class structure, to its corresponding object -> response
+
         Product product = response.toProduct();
+        redisTemplate.opsForHash().put("Product", "PRODUCT_" + productId, product);
         return product;
-    }
-
-    private void connectToDB() throws DBNotFoundException {
-        // connect to DB
-        throw new DBNotFoundException("db not found");
-    }
-
-    private void executeSQLQuery() throws DBTimeoutException {
-        throw new DBTimeoutException("db got timedout trying to execute SQL query");
     }
 
     @Override
     public Page<Product> getAllProducts(Integer pageSize, Integer pageNumber, String sortField, String sortOrder) {
-//        FakeStoreResponseDTO[] responseArray = restTemplate.getForObject(
-//                "https://fakestoreapi.com/products",
-//                FakeStoreResponseDTO[].class
-//        );
-//        List<Product> productsList = new ArrayList<>();
-//        for(FakeStoreResponseDTO response: responseArray){
-//            Product product = response.toProduct();
-//            productsList.add(product);
-//        }
-//        return productsList;
-        return null;
+        List<Product> cachedProductList = (List<Product>) redisTemplate.opsForHash().get("Product", "PRODUCT_ALL");
+        if(cachedProductList != null && cachedProductList.size() > 0){
+            Page<Product> page = new PageImpl<>(cachedProductList);
+            return page;
+        }
+
+        FakeStoreResponseDTO[] responseArray = restTemplate.getForObject(
+                "https://fakestoreapi.com/products",
+                FakeStoreResponseDTO[].class
+        );
+        List<Product> productsList = new ArrayList<>();
+        for(FakeStoreResponseDTO response: responseArray){
+            Product product = response.toProduct();
+            productsList.add(product);
+        }
+        redisTemplate.opsForHash().put("Product", "PRODUCT_ALL", productsList);
+        Page<Product> page = new PageImpl<>(productsList);
+        return page;
     }
 
     @Override
