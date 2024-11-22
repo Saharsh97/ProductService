@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,11 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    @Qualifier("FakeStoreService")
+    @Qualifier("RealDBProductService")
     ProductService productService;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponseDTO> getSingleProduct(@PathVariable("id") String productId) throws DBTimeoutException, DBNotFoundException, ProductNotFoundException {
@@ -31,6 +35,16 @@ public class ProductController {
         ProductResponseDTO productResponseDTO = new ProductResponseDTO();
         productResponseDTO.setProduct(product);
         productResponseDTO.setResponseMessage("success");
+
+        String x = restTemplate.getForObject("http://USERSERVICEAUGMORNING/users/1",
+                String.class);
+
+        System.out.println(x);
+//        UserDTO userDTO = restTemplate.getForObject(
+//                "http://USERSERVICEAUGMORNING/users/1",
+//                UserDTO.class
+//        );
+//        System.out.println("Received User : " + userDTO.getName());
 
         ResponseEntity<ProductResponseDTO> responseEntity = new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
         return responseEntity;
